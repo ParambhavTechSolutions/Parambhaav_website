@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Parambhaav — Tech Solutions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500&family=DM+Mono:wght@300;400&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #050508;
+    --fg: #e8e4f0;
+    --accent: #6c5ce7;
+    --accent2: #00d2ff;
+    --muted: #4a4558;
+    --glow: rgba(108,92,231,0.3);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'Space Grotesk', sans-serif;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Cursor */
+  .cursor { position: fixed; width: 6px; height: 6px; background: var(--accent2); border-radius: 50%; pointer-events: none; z-index: 9999; mix-blend-mode: screen; }
+  .cursor-ring { position: fixed; width: 40px; height: 40px; border: 1px solid rgba(108,92,231,0.6); border-radius: 50%; pointer-events: none; z-index: 9998; transition: transform 0.3s ease, border-color 0.3s; }
+
+  /* CANVAS */
+  #webgl {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2rem 4rem;
+    background: linear-gradient(to bottom, rgba(5,5,8,0.8), transparent);
+    backdrop-filter: blur(0px);
+  }
+
+  .nav-home {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color 0.3s;
+  }
+  .nav-home:hover { color: var(--fg); }
+
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    color: var(--fg);
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+
+  .nav-logo span { color: var(--accent); }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+  .nav-links a {
+    color: var(--fg);
+    text-decoration: none;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    opacity: 0.5;
+    transition: opacity 0.3s;
+  }
+  .nav-links a:hover { opacity: 1; }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 0 4rem 5rem;
+  }
+
+  .hero-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    animation: fadeUp 1s ease 0.5s both;
+  }
+
+  .hero-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(4rem, 10vw, 9rem);
+    font-weight: 800;
+    line-height: 0.9;
+    letter-spacing: -0.03em;
+    animation: fadeUp 1s ease 0.7s both;
+  }
+
+  .hero-title .line2 {
+    display: block;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-subtitle {
+    margin-top: 2.5rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    line-height: 1.9;
+    color: rgba(232,228,240,0.45);
+    max-width: 420px;
+    letter-spacing: 0.03em;
+    animation: fadeUp 1s ease 0.9s both;
+  }
+
+  .hero-scroll {
+    position: absolute;
+    bottom: 3rem;
+    right: 4rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    text-transform: uppercase;
+    animation: fadeUp 1.5s ease 1.2s both;
+  }
+
+  .scroll-dot {
+    width: 1px;
+    height: 60px;
+    background: linear-gradient(to bottom, var(--accent), transparent);
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+
+  @keyframes scrollPulse {
+    0%, 100% { transform: scaleY(1); opacity: 1; }
+    50% { transform: scaleY(0.6); opacity: 0.4; }
+  }
+
+  /* MARQUEE */
+  .marquee-wrap {
+    position: relative;
+    z-index: 2;
+    border-top: 1px solid rgba(108,92,231,0.2);
+    border-bottom: 1px solid rgba(108,92,231,0.2);
+    overflow: hidden;
+    padding: 1.2rem 0;
+    background: rgba(5,5,8,0.8);
+  }
+
+  .marquee {
+    display: flex;
+    gap: 3rem;
+    animation: marquee 20s linear infinite;
+    white-space: nowrap;
+  }
+
+  .marquee span {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--muted);
+    flex-shrink: 0;
+  }
+
+  .marquee span.accent { color: var(--accent); }
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  /* SERVICES */
+  .services {
+    position: relative;
+    z-index: 2;
+    padding: 8rem 4rem;
+    background: var(--bg);
+  }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 6rem;
+  }
+
+  .section-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 6rem;
+    font-weight: 800;
+    color: rgba(108,92,231,0.08);
+    line-height: 1;
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2rem, 5vw, 4rem);
+    font-weight: 700;
+    line-height: 1.1;
+  }
+
+  .section-title span { color: var(--accent); }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    border: 1px solid rgba(108,92,231,0.1);
+  }
+
+  .service-item {
+    padding: 3rem 2.5rem;
+    border: 1px solid rgba(108,92,231,0.1);
+    position: relative;
+    overflow: hidden;
+    transition: background 0.4s;
+  }
+
+  .service-item::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    transform: scaleX(0);
+    transition: transform 0.4s;
+  }
+
+  .service-item:hover::before { transform: scaleX(1); }
+  .service-item:hover { background: rgba(108,92,231,0.06); }
+
+  .service-icon {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    display: block;
+  }
+
+  .service-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--fg);
+  }
+
+  .service-desc {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    line-height: 1.9;
+    color: rgba(232,228,240,0.4);
+    letter-spacing: 0.02em;
+  }
+
+  .service-tag {
+    position: absolute;
+    top: 2rem; right: 2rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .service-item:hover .service-tag { opacity: 1; }
+
+  /* FEATURE STRIP */
+  .feature-strip {
+    position: relative;
+    z-index: 2;
+    padding: 8rem 4rem;
+    background: linear-gradient(135deg, rgba(108,92,231,0.08), rgba(0,210,255,0.04));
+    border-top: 1px solid rgba(108,92,231,0.15);
+  }
+
+  .feature-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: center;
+  }
+
+  .feature-headline {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 800;
+    line-height: 1.05;
+  }
+
+  .feature-headline span {
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .feature-points {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .feature-point {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+  }
+
+  .point-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    padding-top: 0.3rem;
+    flex-shrink: 0;
+  }
+
+  .point-text strong {
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 500;
+    margin-bottom: 0.4rem;
+    color: var(--fg);
+  }
+
+  .point-text p {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: rgba(232,228,240,0.4);
+    line-height: 1.7;
+    letter-spacing: 0.02em;
+  }
+
+  /* CTA */
+  .cta-section {
+    position: relative;
+    z-index: 2;
+    padding: 8rem 4rem;
+    text-align: center;
+    background: var(--bg);
+  }
+
+  .cta-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(3rem, 7vw, 6rem);
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 2rem;
+  }
+
+  .cta-sub {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.8rem;
+    color: rgba(232,228,240,0.4);
+    margin-bottom: 3rem;
+    letter-spacing: 0.05em;
+  }
+
+  .cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.1rem 2.5rem;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    color: #fff;
+    text-decoration: none;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    border-radius: 2px;
+    transition: opacity 0.3s, transform 0.3s;
+  }
+  .cta-btn:hover { opacity: 0.85; transform: translateY(-2px); }
+
+  /* FOOTER */
+  footer {
+    position: relative;
+    z-index: 2;
+    border-top: 1px solid rgba(108,92,231,0.15);
+    padding: 2.5rem 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--bg);
+  }
+
+  .footer-brand {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  .footer-brand a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .footer-parent {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+  .footer-parent a {
+    color: var(--fg);
+    text-decoration: none;
+    opacity: 0.6;
+    transition: opacity 0.3s;
+  }
+  .footer-parent a:hover { opacity: 1; }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.9s ease, transform 0.9s ease; }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  @media (max-width: 768px) {
+    nav { padding: 1.5rem 2rem; }
+    .nav-links { display: none; }
+    .hero { padding: 0 2rem 4rem; }
+    .services, .feature-strip, .cta-section { padding-left: 2rem; padding-right: 2rem; }
+    .services-grid { grid-template-columns: 1fr; }
+    .feature-inner { grid-template-columns: 1fr; gap: 3rem; }
+    footer { padding: 2rem; flex-direction: column; gap: 1rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+
+<!-- WEBGL CANVAS -->
+<canvas id="webgl"></canvas>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-home" href="parambhaav-home.html">← Parambhaav</a>
+  <a class="nav-logo" href="#">Param<span>Tech</span></a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#approach">Approach</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <p class="hero-eyebrow">Parambhaav — Tech Solutions</p>
+  <h1 class="hero-title">
+    We build<br>
+    <span class="line2">the impossible</span>
+  </h1>
+  <p class="hero-subtitle">
+    Immersive digital systems. Enterprise-grade architecture.
+    WebGL and realtime experiences that redefine what the web can do.
+  </p>
+  <div class="hero-scroll">
+    <div class="scroll-dot"></div>
+    Scroll
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee">
+    <span class="accent">— WebGL & 3D</span><span>Enterprise Systems</span>
+    <span class="accent">— Mobile Apps</span><span>AI Integration</span>
+    <span class="accent">— Cloud Architecture</span><span>API Design</span>
+    <span class="accent">— Real-time Data</span><span>UI/UX Engineering</span>
+    <span class="accent">— WebGL & 3D</span><span>Enterprise Systems</span>
+    <span class="accent">— Mobile Apps</span><span>AI Integration</span>
+    <span class="accent">— Cloud Architecture</span><span>API Design</span>
+    <span class="accent">— Real-time Data</span><span>UI/UX Engineering</span>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="section-header">
+    <div class="section-num">01</div>
+    <h2 class="section-title">What we <span>build</span></h2>
+  </div>
+
+  <div class="services-grid reveal">
+    <div class="service-item">
+      <span class="service-icon">⬡</span>
+      <div class="service-name">3D & WebGL Experiences</div>
+      <p class="service-desc">Immersive, GPU-accelerated web experiences using Three.js, WebGPU, and custom shader pipelines. From product configurators to interactive storytelling.</p>
+      <span class="service-tag">Core</span>
+    </div>
+    <div class="service-item">
+      <span class="service-icon">⬡</span>
+      <div class="service-name">Enterprise Platforms</div>
+      <p class="service-desc">Scalable, resilient backend systems architected for growth. Microservices, event-driven design, cloud-native infrastructure on AWS, GCP, and Azure.</p>
+      <span class="service-tag">Core</span>
+    </div>
+    <div class="service-item">
+      <span class="service-icon">⬡</span>
+      <div class="service-name">AI & ML Integration</div>
+      <p class="service-desc">Embed intelligence into your products. LLM orchestration, computer vision pipelines, recommendation systems, and custom model fine-tuning.</p>
+      <span class="service-tag">Core</span>
+    </div>
+    <div class="service-item">
+      <span class="service-icon">⬡</span>
+      <div class="service-name">Mobile Engineering</div>
+      <p class="service-desc">Cross-platform iOS and Android applications with native performance. React Native, Flutter, and Kotlin Multiplatform for real-world scale.</p>
+      <span class="service-tag">Featured</span>
+    </div>
+    <div class="service-item">
+      <span class="service-icon">⬡</span>
+      <div class="service-name">API & Data Systems</div>
+      <p class="service-desc">GraphQL, REST, and gRPC APIs designed for speed and developer experience. Real-time data pipelines with Kafka, Flink, and streaming architectures.</p>
+      <span class="service-tag">Featured</span>
+    </div>
+    <div class="service-item">
+      <span class="service-icon">⬡</span>
+      <div class="service-name">UI/UX Engineering</div>
+      <p class="service-desc">Production-grade design systems and frontend engineering. Performance-obsessed React, Vue, and Svelte applications with pixel-perfect execution.</p>
+      <span class="service-tag">Featured</span>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURE STRIP -->
+<section class="feature-strip" id="approach">
+  <div class="feature-inner">
+    <div class="reveal">
+      <h2 class="feature-headline">
+        Engineering<br>
+        that <span>ships</span><br>
+        and scales
+      </h2>
+    </div>
+    <ul class="feature-points reveal" style="transition-delay:0.15s">
+      <li class="feature-point">
+        <span class="point-num">01</span>
+        <div class="point-text">
+          <strong>Architect first</strong>
+          <p>We design systems for 10× before we write the first line of code. Scalability is a design decision, not an afterthought.</p>
+        </div>
+      </li>
+      <li class="feature-point">
+        <span class="point-num">02</span>
+        <div class="point-text">
+          <strong>Performance as a feature</strong>
+          <p>Sub-second load times, 60fps animations, and lighthouse scores that matter. Users feel the difference.</p>
+        </div>
+      </li>
+      <li class="feature-point">
+        <span class="point-num">03</span>
+        <div class="point-text">
+          <strong>Transparent delivery</strong>
+          <p>Weekly demos, open repositories, and engineering documentation that your team can own after we're done.</p>
+        </div>
+      </li>
+      <li class="feature-point">
+        <span class="point-num">04</span>
+        <div class="point-text">
+          <strong>Full-spectrum team</strong>
+          <p>From infrastructure to interfaces. One team, cohesive vision, zero coordination tax between disciplines.</p>
+        </div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="contact">
+  <h2 class="cta-title reveal">Let's build<br>something extraordinary</h2>
+  <p class="cta-sub reveal" style="transition-delay:0.1s">Ready to ship your most ambitious product yet?</p>
+  <a class="cta-btn reveal" href="mailto:tech@parambhaav.com" style="transition-delay:0.2s">
+    Start the conversation →
+  </a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">
+    <a href="#">Parambhaav Tech Solutions</a>
+  </div>
+  <div class="footer-parent">
+    A vertical of <a href="parambhaav-home.html">Parambhaav Pvt Ltd</a>
+  </div>
+</footer>
+
+<script>
+  // === THREE.JS PARTICLE FIELD ===
+  const canvas = document.getElementById('webgl');
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
+  camera.position.z = 4;
+
+  // Particle field
+  const count = 3500;
+  const geometry = new THREE.BufferGeometry();
+  const positions = new Float32Array(count * 3);
+  const colors = new Float32Array(count * 3);
+  const sizes = new Float32Array(count);
+
+  const palette = [
+    [0.42, 0.36, 0.93], // violet
+    [0.00, 0.82, 1.00], // cyan
+    [0.28, 0.22, 0.65], // dark violet
+    [0.10, 0.10, 0.18], // near black
+  ];
+
+  for (let i = 0; i < count; i++) {
+    const i3 = i * 3;
+    // Spiral galaxy distribution
+    const angle = Math.random() * Math.PI * 2;
+    const radius = Math.pow(Math.random(), 0.5) * 5;
+    const arm = Math.floor(Math.random() * 3) * (Math.PI * 2 / 3);
+    const spiral = angle + arm + radius * 0.4;
+
+    positions[i3]     = Math.cos(spiral) * radius + (Math.random() - 0.5) * 1.2;
+    positions[i3 + 1] = (Math.random() - 0.5) * 1.5;
+    positions[i3 + 2] = Math.sin(spiral) * radius + (Math.random() - 0.5) * 1.2;
+
+    const col = palette[Math.floor(Math.random() * palette.length)];
+    colors[i3] = col[0]; colors[i3+1] = col[1]; colors[i3+2] = col[2];
+
+    sizes[i] = Math.random() * 2.5 + 0.5;
+  }
+
+  geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+  geometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+
+  const material = new THREE.PointsMaterial({
+    size: 0.025,
+    vertexColors: true,
+    transparent: true,
+    opacity: 0.85,
+    sizeAttenuation: true,
+  });
+
+  const particles = new THREE.Points(geometry, material);
+  scene.add(particles);
+
+  // Floating torus wireframe
+  const torusGeo = new THREE.TorusGeometry(1.8, 0.5, 6, 24);
+  const torusMat = new THREE.MeshBasicMaterial({
+    color: 0x6c5ce7,
+    wireframe: true,
+    transparent: true,
+    opacity: 0.06,
+  });
+  const torus = new THREE.Mesh(torusGeo, torusMat);
+  torus.rotation.x = Math.PI * 0.3;
+  scene.add(torus);
+
+  // Icosahedron
+  const icoGeo = new THREE.IcosahedronGeometry(0.8, 1);
+  const icoMat = new THREE.MeshBasicMaterial({
+    color: 0x00d2ff,
+    wireframe: true,
+    transparent: true,
+    opacity: 0.08,
+  });
+  const ico = new THREE.Mesh(icoGeo, icoMat);
+  ico.position.set(2.5, 0.5, -1);
+  scene.add(ico);
+
+  // Mouse parallax
+  let mx = 0, my = 0;
+  document.addEventListener('mousemove', e => {
+    mx = (e.clientX / window.innerWidth  - 0.5) * 2;
+    my = (e.clientY / window.innerHeight - 0.5) * 2;
+  });
+
+  // Scroll-based camera
+  let scrollY = 0;
+  window.addEventListener('scroll', () => { scrollY = window.scrollY; });
+
+  const clock = new THREE.Clock();
+
+  function animate() {
+    requestAnimationFrame(animate);
+    const t = clock.getElapsedTime();
+
+    particles.rotation.y = t * 0.04 + mx * 0.08;
+    particles.rotation.x = my * 0.04 + scrollY * 0.0003;
+
+    torus.rotation.y = t * 0.08;
+    torus.rotation.z = t * 0.03;
+
+    ico.rotation.x = t * 0.12;
+    ico.rotation.y = t * 0.07;
+
+    camera.position.y = -scrollY * 0.002;
+
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+
+  // === CUSTOM CURSOR ===
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursor-ring');
+  let cmx = 0, cmy = 0, crx = 0, cry = 0;
+
+  document.addEventListener('mousemove', e => {
+    cmx = e.clientX; cmy = e.clientY;
+    cursor.style.left = (cmx - 3) + 'px';
+    cursor.style.top  = (cmy - 3) + 'px';
+  });
+
+  function animCursor() {
+    crx += (cmx - crx) * 0.1;
+    cry += (cmy - cry) * 0.1;
+    ring.style.left = (crx - 20) + 'px';
+    ring.style.top  = (cry - 20) + 'px';
+    requestAnimationFrame(animCursor);
+  }
+  animCursor();
+
+  document.querySelectorAll('a, button').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.style.transform = 'scale(3)';
+      ring.style.transform = 'scale(1.8)';
+      ring.style.borderColor = 'rgba(0,210,255,0.8)';
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.style.transform = 'scale(1)';
+      ring.style.transform = 'scale(1)';
+      ring.style.borderColor = 'rgba(108,92,231,0.6)';
+    });
+  });
+
+  // === SCROLL REVEAL ===
+  const reveals = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver(e => {
+    e.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => obs.observe(el));
+</script>
+</body>
+</html>

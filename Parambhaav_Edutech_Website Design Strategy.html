@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Parambhaav — EduTech</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;1,9..144,300;1,9..144,600&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #faf8f3;
+    --ink: #1a1612;
+    --amber: #e87c2e;
+    --amber-light: #f5c896;
+    --amber-pale: #fdf0e0;
+    --teal: #1d7a6b;
+    --teal-light: #e6f5f0;
+    --muted: #8a7f72;
+    --warm-white: #ffffff;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  .cursor { position: fixed; width: 8px; height: 8px; background: var(--amber); border-radius: 50%; pointer-events: none; z-index: 9999; }
+  .cursor-ring { position: fixed; width: 36px; height: 36px; border: 1.5px solid rgba(232,124,46,0.5); border-radius: 50%; pointer-events: none; z-index: 9998; transition: all 0.3s ease; }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.75rem 4rem;
+    background: rgba(250,248,243,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(26,22,18,0.06);
+  }
+
+  .nav-back {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color 0.3s;
+  }
+  .nav-back:hover { color: var(--ink); }
+
+  .nav-logo {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .nav-logo span { color: var(--amber); font-style: italic; }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--ink);
+    text-decoration: none;
+    font-size: 0.82rem;
+    font-weight: 400;
+    opacity: 0.5;
+    transition: opacity 0.3s;
+  }
+  .nav-links a:hover { opacity: 1; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding-top: 6rem;
+    overflow: hidden;
+  }
+
+  .hero-left {
+    padding: 6rem 4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: var(--amber-pale);
+    border: 1px solid var(--amber-light);
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 2.5rem;
+    width: fit-content;
+    animation: fadeUp 0.8s ease both;
+  }
+
+  .pill-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--amber);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.4); opacity: 0.6; }
+  }
+
+  .hero-title {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: clamp(3rem, 6vw, 5.5rem);
+    font-weight: 600;
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    animation: fadeUp 0.8s ease 0.1s both;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    color: var(--amber);
+    font-weight: 300;
+  }
+
+  .hero-title .teal { color: var(--teal); }
+
+  .hero-body {
+    margin-top: 2rem;
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: var(--muted);
+    max-width: 400px;
+    animation: fadeUp 0.8s ease 0.2s both;
+    font-weight: 300;
+  }
+
+  .hero-actions {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-top: 3rem;
+    animation: fadeUp 0.8s ease 0.3s both;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.9rem 2rem;
+    background: var(--amber);
+    color: #fff;
+    text-decoration: none;
+    font-size: 0.82rem;
+    font-weight: 500;
+    border-radius: 4px;
+    transition: background 0.3s, transform 0.2s;
+  }
+  .btn-primary:hover { background: #c96c1c; transform: translateY(-1px); }
+
+  .btn-secondary {
+    font-size: 0.82rem;
+    color: var(--ink);
+    text-decoration: none;
+    opacity: 0.5;
+    transition: opacity 0.3s;
+  }
+  .btn-secondary:hover { opacity: 1; }
+
+  .hero-right {
+    position: relative;
+    overflow: hidden;
+    background: var(--amber-pale);
+  }
+
+  .hero-visual {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  /* Animated circles background */
+  .circle-bg {
+    position: absolute;
+    border-radius: 50%;
+  }
+
+  .stat-floating {
+    position: absolute;
+    background: var(--warm-white);
+    border-radius: 12px;
+    padding: 1.2rem 1.5rem;
+    box-shadow: 0 8px 40px rgba(26,22,18,0.08);
+    animation: float 4s ease-in-out infinite;
+  }
+
+  .stat-floating:nth-child(2) { animation-delay: -2s; }
+  .stat-floating:nth-child(3) { animation-delay: -1s; }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50%       { transform: translateY(-12px); }
+  }
+
+  .stat-num {
+    font-family: 'Fraunces', serif;
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--amber);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 0.72rem;
+    color: var(--muted);
+    margin-top: 0.3rem;
+    white-space: nowrap;
+  }
+
+  .hero-book {
+    width: 200px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* MARQUEE */
+  .marquee-wrap {
+    background: var(--ink);
+    padding: 1.1rem 0;
+    overflow: hidden;
+  }
+
+  .marquee {
+    display: flex;
+    gap: 2.5rem;
+    animation: marquee 22s linear infinite;
+    white-space: nowrap;
+  }
+
+  .marquee span {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: rgba(250,248,243,0.35);
+    flex-shrink: 0;
+  }
+
+  .marquee span.acc { color: var(--amber); }
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  /* OFFERINGS */
+  .offerings {
+    padding: 8rem 4rem;
+    background: var(--warm-white);
+  }
+
+  .sec-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--amber);
+    margin-bottom: 1.5rem;
+  }
+
+  .sec-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(2rem, 4.5vw, 3.5rem);
+    font-weight: 600;
+    line-height: 1.1;
+    max-width: 500px;
+    margin-bottom: 5rem;
+  }
+
+  .sec-title em { font-style: italic; color: var(--teal); font-weight: 300; }
+
+  .offerings-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+
+  .offering-card {
+    background: var(--bg);
+    border-radius: 16px;
+    padding: 3rem;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .offering-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 24px 60px rgba(26,22,18,0.08);
+  }
+
+  .offering-card.large {
+    grid-column: span 2;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: center;
+    background: var(--teal);
+    color: #fff;
+  }
+
+  .offering-card.large .offering-name { color: #fff; }
+  .offering-card.large .offering-desc { color: rgba(255,255,255,0.65); }
+
+  .offering-card.large .offering-tag {
+    background: rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.8);
+  }
+
+  .offering-icon {
+    width: 48px; height: 48px;
+    border-radius: 12px;
+    background: var(--amber-pale);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 2rem;
+    font-size: 1.4rem;
+  }
+
+  .offering-card.large .offering-icon {
+    background: rgba(255,255,255,0.12);
+  }
+
+  .offering-name {
+    font-family: 'Fraunces', serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--ink);
+  }
+
+  .offering-desc {
+    font-size: 0.85rem;
+    line-height: 1.8;
+    color: var(--muted);
+  }
+
+  .offering-tag {
+    display: inline-block;
+    margin-top: 1.5rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--amber);
+    background: var(--amber-pale);
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+  }
+
+  /* PHILOSOPHY */
+  .edu-philosophy {
+    padding: 8rem 4rem;
+    background: var(--bg);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: center;
+  }
+
+  .phi-visual {
+    position: relative;
+    height: 480px;
+  }
+
+  .phi-card {
+    position: absolute;
+    background: var(--warm-white);
+    border-radius: 16px;
+    padding: 2rem 2.5rem;
+    box-shadow: 0 12px 40px rgba(26,22,18,0.07);
+  }
+
+  .phi-card-num {
+    font-family: 'Fraunces', serif;
+    font-size: 3rem;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--amber-light);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  .phi-card-title {
+    font-family: 'Fraunces', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  .phi-card-text {
+    font-size: 0.8rem;
+    color: var(--muted);
+    line-height: 1.7;
+    max-width: 220px;
+  }
+
+  .phi-text h2 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 600;
+    line-height: 1.15;
+    margin-bottom: 2rem;
+  }
+
+  .phi-text h2 em { font-style: italic; color: var(--amber); font-weight: 300; }
+
+  .phi-text p {
+    font-size: 0.88rem;
+    line-height: 1.9;
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+    max-width: 440px;
+  }
+
+  /* TESTIMONIAL / QUOTE */
+  .quote-band {
+    padding: 6rem 4rem;
+    background: var(--amber-pale);
+    border-top: 1px solid var(--amber-light);
+    border-bottom: 1px solid var(--amber-light);
+    text-align: center;
+  }
+
+  .quote-text {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.5;
+    max-width: 800px;
+    margin: 0 auto 2rem;
+    color: var(--ink);
+  }
+
+  .quote-src {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--amber);
+  }
+
+  /* CTA */
+  .edu-cta {
+    padding: 8rem 4rem;
+    background: var(--ink);
+    color: var(--bg);
+    text-align: center;
+  }
+
+  .edu-cta h2 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    font-weight: 600;
+    line-height: 1.05;
+    margin-bottom: 1.5rem;
+  }
+
+  .edu-cta h2 em { font-style: italic; color: var(--amber); font-weight: 300; }
+
+  .edu-cta p {
+    font-size: 0.88rem;
+    color: rgba(250,248,243,0.5);
+    margin-bottom: 3rem;
+  }
+
+  .cta-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+  }
+
+  .cta-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 2.2rem;
+    background: var(--amber);
+    color: #fff;
+    text-decoration: none;
+    font-size: 0.82rem;
+    font-weight: 500;
+    border-radius: 4px;
+    transition: background 0.3s;
+  }
+  .cta-primary:hover { background: #c96c1c; }
+
+  .cta-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 2.2rem;
+    border: 1px solid rgba(250,248,243,0.2);
+    color: var(--bg);
+    text-decoration: none;
+    font-size: 0.82rem;
+    border-radius: 4px;
+    transition: border-color 0.3s;
+  }
+  .cta-ghost:hover { border-color: rgba(250,248,243,0.5); }
+
+  /* FOOTER */
+  footer {
+    background: var(--ink);
+    border-top: 1px solid rgba(250,248,243,0.06);
+    padding: 2.5rem 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .footer-brand {
+    font-family: 'Fraunces', serif;
+    font-size: 1rem;
+    color: var(--bg);
+  }
+  .footer-brand span { color: var(--amber); font-style: italic; }
+
+  .footer-parent {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    color: rgba(250,248,243,0.35);
+    text-transform: uppercase;
+  }
+  .footer-parent a { color: rgba(250,248,243,0.6); text-decoration: none; transition: color 0.3s; }
+  .footer-parent a:hover { color: var(--bg); }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.8s ease, transform 0.8s ease; }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  @media (max-width: 768px) {
+    nav { padding: 1.5rem 2rem; }
+    .nav-links { display: none; }
+    .hero { grid-template-columns: 1fr; min-height: auto; }
+    .hero-right { height: 300px; }
+    .hero-left { padding: 4rem 2rem; }
+    .offerings, .edu-philosophy, .edu-cta, footer { padding-left: 2rem; padding-right: 2rem; }
+    .offerings-grid { grid-template-columns: 1fr; }
+    .offering-card.large { grid-column: span 1; grid-template-columns: 1fr; }
+    .edu-philosophy { grid-template-columns: 1fr; }
+    .phi-visual { height: 320px; }
+    .cta-row { flex-direction: column; }
+    footer { flex-direction: column; gap: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-back" href="parambhaav-home.html">← Parambhaav</a>
+  <a class="nav-logo" href="#">Param<span>Edu</span></a>
+  <ul class="nav-links">
+    <li><a href="#offerings">Offerings</a></li>
+    <li><a href="#approach">Approach</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-pill">
+      <div class="pill-dot"></div>
+      Now enrolling — 2025 cohort
+    </div>
+    <h1 class="hero-title">
+      Learning<br>
+      that <em>stays</em><br>
+      with <span class="teal">you</span>
+    </h1>
+    <p class="hero-body">
+      Parambhaav EduTech builds adaptive learning experiences that combine
+      expert pedagogy, cutting-edge technology, and a deep respect for how
+      human minds actually learn.
+    </p>
+    <div class="hero-actions">
+      <a class="btn-primary" href="#offerings">Explore programs →</a>
+      <a class="btn-secondary" href="#contact">Talk to us</a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="hero-visual">
+      <!-- Decorative circles -->
+      <div class="circle-bg" style="width:500px;height:500px;background:rgba(232,124,46,0.06);top:-100px;right:-100px;border-radius:50%;"></div>
+      <div class="circle-bg" style="width:300px;height:300px;background:rgba(29,122,107,0.08);bottom:-50px;left:-50px;border-radius:50%;"></div>
+
+      <!-- Floating stats -->
+      <div class="stat-floating" style="top:15%;left:10%;">
+        <div class="stat-num">94%</div>
+        <div class="stat-label">Learner satisfaction</div>
+      </div>
+
+      <div class="stat-floating" style="top:40%;right:8%;animation-delay:-1.5s;">
+        <div class="stat-num">10k+</div>
+        <div class="stat-label">Students transformed</div>
+      </div>
+
+      <div class="stat-floating" style="bottom:15%;left:20%;animation-delay:-3s;">
+        <div class="stat-num">3×</div>
+        <div class="stat-label">Faster skill acquisition</div>
+      </div>
+
+      <!-- Center visual element -->
+      <svg width="160" height="160" viewBox="0 0 160 160" style="position:relative;z-index:1;">
+        <circle cx="80" cy="80" r="70" fill="none" stroke="rgba(232,124,46,0.2)" stroke-width="1"/>
+        <circle cx="80" cy="80" r="50" fill="none" stroke="rgba(29,122,107,0.2)" stroke-width="1"/>
+        <circle cx="80" cy="80" r="30" fill="rgba(232,124,46,0.1)" stroke="rgba(232,124,46,0.3)" stroke-width="1"/>
+        <text x="80" y="75" text-anchor="middle" font-family="Fraunces, serif" font-size="28" fill="#e87c2e" font-weight="600">P</text>
+        <text x="80" y="97" text-anchor="middle" font-family="DM Mono, monospace" font-size="9" fill="#8a7f72" letter-spacing="2">EduTech</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee">
+    <span class="acc">— Adaptive Learning</span><span>Skill Certification</span>
+    <span class="acc">— Live Mentorship</span><span>Career Pathways</span>
+    <span class="acc">— AI-Powered Tutoring</span><span>Project-Based Curriculum</span>
+    <span class="acc">— Industry Partnerships</span><span>Outcome-Focused</span>
+    <span class="acc">— Adaptive Learning</span><span>Skill Certification</span>
+    <span class="acc">— Live Mentorship</span><span>Career Pathways</span>
+    <span class="acc">— AI-Powered Tutoring</span><span>Project-Based Curriculum</span>
+    <span class="acc">— Industry Partnerships</span><span>Outcome-Focused</span>
+  </div>
+</div>
+
+<!-- OFFERINGS -->
+<section class="offerings" id="offerings">
+  <p class="sec-eyebrow reveal">What we offer</p>
+  <h2 class="sec-title reveal" style="transition-delay:0.05s">Programs built for <em>real-world</em> outcomes</h2>
+
+  <div class="offerings-grid">
+    <div class="offering-card reveal" style="transition-delay:0.1s">
+      <div class="offering-icon">🎯</div>
+      <div class="offering-name">Adaptive Skill Tracks</div>
+      <p class="offering-desc">Personalized learning journeys powered by AI that adapts to each learner's pace, style, and goals. No two paths are the same.</p>
+      <span class="offering-tag">Self-paced</span>
+    </div>
+
+    <div class="offering-card reveal" style="transition-delay:0.15s">
+      <div class="offering-icon">🧑‍🏫</div>
+      <div class="offering-name">Live Mentorship Cohorts</div>
+      <p class="offering-desc">Small-group cohorts led by industry practitioners. Real projects, real feedback, real accountability — not recorded lectures.</p>
+      <span class="offering-tag">Cohort-based</span>
+    </div>
+
+    <div class="offering-card large reveal" style="transition-delay:0.2s">
+      <div>
+        <div class="offering-icon">🏢</div>
+        <div class="offering-name">Enterprise Upskilling</div>
+        <p class="offering-desc">Bespoke learning programs for organizations navigating digital transformation. We partner with L&D teams to design, deliver, and measure workforce capability programs at scale — from AI literacy to full-stack engineering.</p>
+        <span class="offering-tag" style="background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.8);">B2B Partnership</span>
+      </div>
+      <div style="padding:2rem;background:rgba(255,255,255,0.06);border-radius:12px;">
+        <p style="font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.1em;color:rgba(255,255,255,0.4);text-transform:uppercase;margin-bottom:1rem;">What's included</p>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:0.75rem;">
+          <li style="font-size:0.82rem;color:rgba(255,255,255,0.75);padding-left:1.2rem;position:relative;">
+            <span style="position:absolute;left:0;color:#e8a46e;">→</span> Needs assessment & curriculum design
+          </li>
+          <li style="font-size:0.82rem;color:rgba(255,255,255,0.75);padding-left:1.2rem;position:relative;">
+            <span style="position:absolute;left:0;color:#e8a46e;">→</span> Dedicated instructor pods
+          </li>
+          <li style="font-size:0.82rem;color:rgba(255,255,255,0.75);padding-left:1.2rem;position:relative;">
+            <span style="position:absolute;left:0;color:#e8a46e;">→</span> Progress analytics dashboard
+          </li>
+          <li style="font-size:0.82rem;color:rgba(255,255,255,0.75);padding-left:1.2rem;position:relative;">
+            <span style="position:absolute;left:0;color:#e8a46e;">→</span> Certification & credentialing
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="offering-card reveal" style="transition-delay:0.25s;background:var(--teal-light);">
+      <div class="offering-icon" style="background:rgba(29,122,107,0.1);">🤖</div>
+      <div class="offering-name">AI-Powered Tutoring</div>
+      <p class="offering-desc">24/7 intelligent tutoring that answers questions, grades exercises, and surfaces exactly what each learner needs next.</p>
+      <span class="offering-tag" style="background:rgba(29,122,107,0.1);color:var(--teal);">Always-on</span>
+    </div>
+
+    <div class="offering-card reveal" style="transition-delay:0.3s;">
+      <div class="offering-icon">🎓</div>
+      <div class="offering-name">Certification Programs</div>
+      <p class="offering-desc">Industry-recognized credentials that employers trust. Competency-based assessments, not just seat-time completion certificates.</p>
+      <span class="offering-tag">Verified credentials</span>
+    </div>
+  </div>
+</section>
+
+<!-- PHILOSOPHY -->
+<section class="edu-philosophy" id="approach">
+  <div class="phi-visual reveal">
+    <!-- Stacked cards -->
+    <div class="phi-card" style="top:0;left:5%;width:260px;transform:rotate(-2deg);">
+      <div class="phi-card-num">01</div>
+      <div class="phi-card-title">Science-backed</div>
+      <p class="phi-card-text">Spaced repetition, retrieval practice, and interleaving — we apply cognitive science that actually works.</p>
+    </div>
+    <div class="phi-card" style="top:28%;right:0;width:250px;transform:rotate(1.5deg);">
+      <div class="phi-card-num">02</div>
+      <div class="phi-card-title">Outcome-led</div>
+      <p class="phi-card-text">Every curriculum element traces back to a measurable skill or career outcome. No fluff.</p>
+    </div>
+    <div class="phi-card" style="bottom:5%;left:10%;width:270px;">
+      <div class="phi-card-num">03</div>
+      <div class="phi-card-title">Deeply human</div>
+      <p class="phi-card-text">Technology amplifies great teaching; it doesn't replace it. We lead with human expertise.</p>
+    </div>
+  </div>
+
+  <div class="phi-text reveal" style="transition-delay:0.15s">
+    <p class="sec-eyebrow">Our philosophy</p>
+    <h2>Education that <em>respects</em> the learner</h2>
+    <p>
+      The education industry has too often treated learners as passive consumers.
+      At Parambhaav EduTech, we believe great education is a conversation — adaptive,
+      responsive, and deeply attuned to where each person is in their journey.
+    </p>
+    <p>
+      We obsess over learning science so our learners don't have to. Every feature,
+      every interaction, every piece of content is designed with one question:
+      does this help someone understand something better?
+    </p>
+  </div>
+</section>
+
+<!-- QUOTE -->
+<div class="quote-band reveal">
+  <p class="quote-text">
+    "The goal of education is not to fill a bucket, but to light a fire."
+  </p>
+  <p class="quote-src">— Our north star</p>
+</div>
+
+<!-- CTA -->
+<section class="edu-cta" id="contact">
+  <h2 class="reveal">Ready to <em>transform</em><br>how your team learns?</h2>
+  <p class="reveal" style="transition-delay:0.1s">Whether you're an individual learner or an enterprise — we have a path for you.</p>
+  <div class="cta-row reveal" style="transition-delay:0.2s">
+    <a class="cta-primary" href="mailto:edu@parambhaav.com">Talk to our team →</a>
+    <a class="cta-ghost" href="#offerings">Explore programs</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">Param<span>Edu</span>Tech</div>
+  <div class="footer-parent">A vertical of <a href="parambhaav-home.html">Parambhaav Pvt Ltd</a></div>
+</footer>
+
+<script>
+  // Cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursor-ring');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = (mx - 4) + 'px';
+    cursor.style.top  = (my - 4) + 'px';
+  });
+
+  function anim() {
+    rx += (mx - rx) * 0.11;
+    ry += (my - ry) * 0.11;
+    ring.style.left = (rx - 18) + 'px';
+    ring.style.top  = (ry - 18) + 'px';
+    requestAnimationFrame(anim);
+  }
+  anim();
+
+  document.querySelectorAll('a, button').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.style.transform = 'scale(2.5)';
+      ring.style.transform = 'scale(1.5)';
+      ring.style.borderColor = 'rgba(232,124,46,0.9)';
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.style.transform = 'scale(1)';
+      ring.style.transform = 'scale(1)';
+      ring.style.borderColor = 'rgba(232,124,46,0.5)';
+    });
+  });
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver(e => {
+    e.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+  }, { threshold: 0.08 });
+  reveals.forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
