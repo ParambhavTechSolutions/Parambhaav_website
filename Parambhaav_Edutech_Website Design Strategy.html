@@ -3,22 +3,28 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Parambhaav — EduTech</title>
+<title>Parambhaav Tech — EduTech</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;1,9..144,300;1,9..144,600&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@300&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<!-- Brand tokens, logo and favicon: github.com/ParambhavTechSolutions/parambhaav-brand -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ParambhavTechSolutions/parambhaav-brand@v1.0.0/tokens/tokens.css">
+<link rel="icon" type="image/svg+xml" href="https://cdn.jsdelivr.net/gh/ParambhavTechSolutions/parambhaav-brand@v1.0.0/brand/logo/favicon.svg">
 <style>
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
   :root {
-    --bg: #faf8f3;
-    --ink: #1a1612;
-    --amber: #e87c2e;
-    --amber-light: #f5c896;
-    --amber-pale: #fdf0e0;
-    --teal: #1d7a6b;
-    --teal-light: #e6f5f0;
-    --muted: #8a7f72;
-    --warm-white: #ffffff;
+    /* Mapped to parambhaav-brand tokens (fallbacks keep the page working offline).
+       Brand is monochrome: the old amber/teal accents become charcoal/grey on light
+       sections and silver on dark sections (see overrides at the end of this block). */
+    --bg: var(--pb-color-bg-light, #FFFFFF);
+    --ink: var(--pb-color-charcoal, #17191D);
+    --amber: var(--pb-color-charcoal, #17191D);
+    --amber-light: var(--pb-color-silver-shadow, #AEB4BC);
+    --amber-pale: var(--pb-color-silver-highlight, #F7F8FA);
+    --teal: var(--pb-color-muted, #727983);
+    --teal-light: var(--pb-color-silver-highlight, #F7F8FA);
+    --muted: var(--pb-color-muted, #727983);
+    --warm-white: var(--pb-color-white, #FFFFFF);
   }
 
   html { scroll-behavior: smooth; }
@@ -26,13 +32,13 @@
   body {
     background: var(--bg);
     color: var(--ink);
-    font-family: 'DM Sans', sans-serif;
+    font-family: var(--pb-font-body, 'Inter', Arial, sans-serif);
     overflow-x: hidden;
     cursor: none;
   }
 
   .cursor { position: fixed; width: 8px; height: 8px; background: var(--amber); border-radius: 50%; pointer-events: none; z-index: 9999; }
-  .cursor-ring { position: fixed; width: 36px; height: 36px; border: 1.5px solid rgba(232,124,46,0.5); border-radius: 50%; pointer-events: none; z-index: 9998; transition: all 0.3s ease; }
+  .cursor-ring { position: fixed; width: 36px; height: 36px; border: 1.5px solid rgba(23,25,29,0.5); border-radius: 50%; pointer-events: none; z-index: 9998; transition: all 0.3s ease; }
 
   /* NAV */
   nav {
@@ -43,13 +49,13 @@
     align-items: center;
     justify-content: space-between;
     padding: 1.75rem 4rem;
-    background: rgba(250,248,243,0.92);
+    background: rgba(255,255,255,0.92);
     backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(26,22,18,0.06);
+    border-bottom: 1px solid rgba(23,25,29,0.06);
   }
 
   .nav-back {
-    font-family: 'DM Mono', monospace;
+    font-family: var(--pb-font-mono, ui-monospace, monospace);
     font-size: 0.65rem;
     letter-spacing: 0.15em;
     color: var(--muted);
@@ -60,7 +66,7 @@
   .nav-back:hover { color: var(--ink); }
 
   .nav-logo {
-    font-family: 'Fraunces', Georgia, serif;
+    font-family: var(--pb-font-display, 'Montserrat', sans-serif);
     font-size: 1.1rem;
     font-weight: 600;
     color: var(--ink);
@@ -111,7 +117,7 @@
     border: 1px solid var(--amber-light);
     padding: 0.5rem 1rem;
     border-radius: 999px;
-    font-family: 'DM Mono', monospace;
+    font-family: var(--pb-font-mono, ui-monospace, monospace);
     font-size: 0.65rem;
     letter-spacing: 0.15em;
     text-transform: uppercase;
@@ -134,7 +140,7 @@
   }
 
   .hero-title {
-    font-family: 'Fraunces', Georgia, serif;
+    font-family: var(--pb-font-display, 'Montserrat', sans-serif);
     font-size: clamp(3rem, 6vw, 5.5rem);
     font-weight: 600;
     line-height: 1.08;
@@ -181,7 +187,7 @@
     border-radius: 4px;
     transition: background 0.3s, transform 0.2s;
   }
-  .btn-primary:hover { background: #c96c1c; transform: translateY(-1px); }
+  .btn-primary:hover { background: var(--pb-color-black, #090A0C); transform: translateY(-1px); }
 
   .btn-secondary {
     font-size: 0.82rem;
@@ -218,7 +224,7 @@
     background: var(--warm-white);
     border-radius: 12px;
     padding: 1.2rem 1.5rem;
-    box-shadow: 0 8px 40px rgba(26,22,18,0.08);
+    box-shadow: 0 8px 40px rgba(23,25,29,0.08);
     animation: float 4s ease-in-out infinite;
   }
 
@@ -231,7 +237,7 @@
   }
 
   .stat-num {
-    font-family: 'Fraunces', serif;
+    font-family: var(--pb-font-display, 'Montserrat', sans-serif);
     font-size: 2rem;
     font-weight: 600;
     color: var(--amber);
@@ -266,15 +272,15 @@
   }
 
   .marquee span {
-    font-family: 'DM Mono', monospace;
+    font-family: var(--pb-font-mono, ui-monospace, monospace);
     font-size: 0.65rem;
     letter-spacing: 0.25em;
     text-transform: uppercase;
-    color: rgba(250,248,243,0.35);
+    color: rgba(255,255,255,0.35);
     flex-shrink: 0;
   }
 
-  .marquee span.acc { color: var(--amber); }
+  .marquee span.acc { color: var(--pb-color-silver, #D9DDE2); }
 
   @keyframes marquee {
     from { transform: translateX(0); }
@@ -288,7 +294,7 @@
   }
 
   .sec-eyebrow {
-    font-family: 'DM Mono', monospace;
+    font-family: var(--pb-font-mono, ui-monospace, monospace);
     font-size: 0.65rem;
     letter-spacing: 0.3em;
     text-transform: uppercase;
@@ -297,7 +303,7 @@
   }
 
   .sec-title {
-    font-family: 'Fraunces', serif;
+    font-family: var(--pb-font-display, 'Montserrat', sans-serif);
     font-size: clamp(2rem, 4.5vw, 3.5rem);
     font-weight: 600;
     line-height: 1.1;
@@ -324,7 +330,7 @@
 
   .offering-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 24px 60px rgba(26,22,18,0.08);
+    box-shadow: 0 24px 60px rgba(23,25,29,0.08);
   }
 
   .offering-card.large {
@@ -333,7 +339,7 @@
     grid-template-columns: 1fr 1fr;
     gap: 3rem;
     align-items: center;
-    background: var(--teal);
+    background: var(--pb-color-charcoal, #17191D);
     color: #fff;
   }
 
@@ -361,7 +367,7 @@
   }
 
   .offering-name {
-    font-family: 'Fraunces', serif;
+    font-family: var(--pb-font-display, 'Montserrat', sans-serif);
     font-size: 1.5rem;
     font-weight: 600;
     margin-bottom: 1rem;
@@ -377,7 +383,7 @@
   .offering-tag {
     display: inline-block;
     margin-top: 1.5rem;
-    font-family: 'DM Mono', monospace;
+    font-family: var(--pb-font-mono, ui-monospace, monospace);
     font-size: 0.62rem;
     letter-spacing: 0.15em;
     text-transform: uppercase;
@@ -407,21 +413,21 @@
     background: var(--warm-white);
     border-radius: 16px;
     padding: 2rem 2.5rem;
-    box-shadow: 0 12px 40px rgba(26,22,18,0.07);
+    box-shadow: 0 12px 40px rgba(23,25,29,0.07);
   }
 
   .phi-card-num {
-    font-family: 'Fraunces', serif;
+    font-family: var(--pb-font-display, 'Montserrat', sans-serif);
     font-size: 3rem;
     font-weight: 300;
     font-style: italic;
-    color: var(--amber-light);
+    color: var(--pb-color-muted, #727983);
     line-height: 1;
     margin-bottom: 0.5rem;
   }
 
   .phi-card-title {
-    font-family: 'Fraunces', serif;
+    font-family: var(--pb-font-display, 'Montserrat', sans-serif);
     font-size: 1.1rem;
     font-weight: 600;
     margin-bottom: 0.5rem;
@@ -435,7 +441,7 @@
   }
 
   .phi-text h2 {
-    font-family: 'Fraunces', serif;
+    font-family: var(--pb-font-display, 'Montserrat', sans-serif);
     font-size: clamp(2rem, 4vw, 3.2rem);
     font-weight: 600;
     line-height: 1.15;
@@ -462,7 +468,7 @@
   }
 
   .quote-text {
-    font-family: 'Fraunces', serif;
+    font-family: var(--pb-font-display, 'Montserrat', sans-serif);
     font-size: clamp(1.5rem, 4vw, 2.5rem);
     font-weight: 300;
     font-style: italic;
@@ -473,7 +479,7 @@
   }
 
   .quote-src {
-    font-family: 'DM Mono', monospace;
+    font-family: var(--pb-font-mono, ui-monospace, monospace);
     font-size: 0.65rem;
     letter-spacing: 0.2em;
     text-transform: uppercase;
@@ -489,18 +495,18 @@
   }
 
   .edu-cta h2 {
-    font-family: 'Fraunces', serif;
+    font-family: var(--pb-font-display, 'Montserrat', sans-serif);
     font-size: clamp(2.5rem, 6vw, 5rem);
     font-weight: 600;
     line-height: 1.05;
     margin-bottom: 1.5rem;
   }
 
-  .edu-cta h2 em { font-style: italic; color: var(--amber); font-weight: 300; }
+  .edu-cta h2 em { font-style: italic; color: var(--pb-color-silver, #D9DDE2); font-weight: 300; }
 
   .edu-cta p {
     font-size: 0.88rem;
-    color: rgba(250,248,243,0.5);
+    color: rgba(255,255,255,0.5);
     margin-bottom: 3rem;
   }
 
@@ -524,26 +530,26 @@
     border-radius: 4px;
     transition: background 0.3s;
   }
-  .cta-primary:hover { background: #c96c1c; }
+  .cta-primary:hover { background: var(--pb-color-black, #090A0C); }
 
   .cta-ghost {
     display: inline-flex;
     align-items: center;
     gap: 0.75rem;
     padding: 1rem 2.2rem;
-    border: 1px solid rgba(250,248,243,0.2);
+    border: 1px solid rgba(255,255,255,0.2);
     color: var(--bg);
     text-decoration: none;
     font-size: 0.82rem;
     border-radius: 4px;
     transition: border-color 0.3s;
   }
-  .cta-ghost:hover { border-color: rgba(250,248,243,0.5); }
+  .cta-ghost:hover { border-color: rgba(255,255,255,0.5); }
 
   /* FOOTER */
   footer {
     background: var(--ink);
-    border-top: 1px solid rgba(250,248,243,0.06);
+    border-top: 1px solid rgba(255,255,255,0.06);
     padding: 2.5rem 4rem;
     display: flex;
     align-items: center;
@@ -551,20 +557,20 @@
   }
 
   .footer-brand {
-    font-family: 'Fraunces', serif;
+    font-family: var(--pb-font-display, 'Montserrat', sans-serif);
     font-size: 1rem;
     color: var(--bg);
   }
-  .footer-brand span { color: var(--amber); font-style: italic; }
+  .footer-brand span { color: var(--pb-color-silver, #D9DDE2); font-style: italic; }
 
   .footer-parent {
-    font-family: 'DM Mono', monospace;
+    font-family: var(--pb-font-mono, ui-monospace, monospace);
     font-size: 0.65rem;
     letter-spacing: 0.15em;
-    color: rgba(250,248,243,0.35);
+    color: rgba(255,255,255,0.35);
     text-transform: uppercase;
   }
-  .footer-parent a { color: rgba(250,248,243,0.6); text-decoration: none; transition: color 0.3s; }
+  .footer-parent a { color: rgba(255,255,255,0.6); text-decoration: none; transition: color 0.3s; }
   .footer-parent a:hover { color: var(--bg); }
 
   /* ANIMATIONS */
@@ -590,6 +596,10 @@
     .cta-row { flex-direction: column; }
     footer { flex-direction: column; gap: 1rem; }
   }
+
+  /* Brand: logo symbol in nav (parambhaav-brand) */
+  .nav-logo { display: inline-flex; align-items: center; gap: 0.6em; font-family: var(--pb-font-display, 'Montserrat', sans-serif); }
+  .nav-logo-mark { height: 1.9em; width: auto; display: block; }
 </style>
 </head>
 <body>
@@ -600,7 +610,7 @@
 <!-- NAV -->
 <nav>
   <a class="nav-back" href="parambhaav-home.html">← Parambhaav</a>
-  <a class="nav-logo" href="#">Param<span>Edu</span></a>
+  <a class="nav-logo" href="#"><img class="nav-logo-mark" src="https://cdn.jsdelivr.net/gh/ParambhavTechSolutions/parambhaav-brand@v1.0.0/brand/logo/symbol.svg" alt="" aria-hidden="true">Parambhaav Tech <span>EduTech</span></a>
   <ul class="nav-links">
     <li><a href="#offerings">Offerings</a></li>
     <li><a href="#approach">Approach</a></li>
@@ -634,8 +644,8 @@
   <div class="hero-right">
     <div class="hero-visual">
       <!-- Decorative circles -->
-      <div class="circle-bg" style="width:500px;height:500px;background:rgba(232,124,46,0.06);top:-100px;right:-100px;border-radius:50%;"></div>
-      <div class="circle-bg" style="width:300px;height:300px;background:rgba(29,122,107,0.08);bottom:-50px;left:-50px;border-radius:50%;"></div>
+      <div class="circle-bg" style="width:500px;height:500px;background:rgba(23,25,29,0.06);top:-100px;right:-100px;border-radius:50%;"></div>
+      <div class="circle-bg" style="width:300px;height:300px;background:rgba(114,121,131,0.08);bottom:-50px;left:-50px;border-radius:50%;"></div>
 
       <!-- Floating stats -->
       <div class="stat-floating" style="top:15%;left:10%;">
@@ -655,11 +665,11 @@
 
       <!-- Center visual element -->
       <svg width="160" height="160" viewBox="0 0 160 160" style="position:relative;z-index:1;">
-        <circle cx="80" cy="80" r="70" fill="none" stroke="rgba(232,124,46,0.2)" stroke-width="1"/>
-        <circle cx="80" cy="80" r="50" fill="none" stroke="rgba(29,122,107,0.2)" stroke-width="1"/>
-        <circle cx="80" cy="80" r="30" fill="rgba(232,124,46,0.1)" stroke="rgba(232,124,46,0.3)" stroke-width="1"/>
-        <text x="80" y="75" text-anchor="middle" font-family="Fraunces, serif" font-size="28" fill="#e87c2e" font-weight="600">P</text>
-        <text x="80" y="97" text-anchor="middle" font-family="DM Mono, monospace" font-size="9" fill="#8a7f72" letter-spacing="2">EduTech</text>
+        <circle cx="80" cy="80" r="70" fill="none" stroke="rgba(23,25,29,0.2)" stroke-width="1"/>
+        <circle cx="80" cy="80" r="50" fill="none" stroke="rgba(114,121,131,0.2)" stroke-width="1"/>
+        <circle cx="80" cy="80" r="30" fill="rgba(23,25,29,0.1)" stroke="rgba(23,25,29,0.3)" stroke-width="1"/>
+        <image href="https://cdn.jsdelivr.net/gh/ParambhavTechSolutions/parambhaav-brand@v1.0.0/brand/logo/symbol.svg" x="58" y="46" width="44" height="44"/>
+        <text x="80" y="97" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="9" fill="#727983" letter-spacing="2">EduTech</text>
       </svg>
     </div>
   </div>
@@ -707,29 +717,29 @@
         <span class="offering-tag" style="background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.8);">B2B Partnership</span>
       </div>
       <div style="padding:2rem;background:rgba(255,255,255,0.06);border-radius:12px;">
-        <p style="font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.1em;color:rgba(255,255,255,0.4);text-transform:uppercase;margin-bottom:1rem;">What's included</p>
+        <p style="font-family: var(--pb-font-mono, ui-monospace, monospace);font-size:0.65rem;letter-spacing:0.1em;color:rgba(255,255,255,0.4);text-transform:uppercase;margin-bottom:1rem;">What's included</p>
         <ul style="list-style:none;display:flex;flex-direction:column;gap:0.75rem;">
           <li style="font-size:0.82rem;color:rgba(255,255,255,0.75);padding-left:1.2rem;position:relative;">
-            <span style="position:absolute;left:0;color:#e8a46e;">→</span> Needs assessment & curriculum design
+            <span style="position:absolute;left:0;color:var(--pb-color-silver, #D9DDE2);">→</span> Needs assessment & curriculum design
           </li>
           <li style="font-size:0.82rem;color:rgba(255,255,255,0.75);padding-left:1.2rem;position:relative;">
-            <span style="position:absolute;left:0;color:#e8a46e;">→</span> Dedicated instructor pods
+            <span style="position:absolute;left:0;color:var(--pb-color-silver, #D9DDE2);">→</span> Dedicated instructor pods
           </li>
           <li style="font-size:0.82rem;color:rgba(255,255,255,0.75);padding-left:1.2rem;position:relative;">
-            <span style="position:absolute;left:0;color:#e8a46e;">→</span> Progress analytics dashboard
+            <span style="position:absolute;left:0;color:var(--pb-color-silver, #D9DDE2);">→</span> Progress analytics dashboard
           </li>
           <li style="font-size:0.82rem;color:rgba(255,255,255,0.75);padding-left:1.2rem;position:relative;">
-            <span style="position:absolute;left:0;color:#e8a46e;">→</span> Certification & credentialing
+            <span style="position:absolute;left:0;color:var(--pb-color-silver, #D9DDE2);">→</span> Certification & credentialing
           </li>
         </ul>
       </div>
     </div>
 
     <div class="offering-card reveal" style="transition-delay:0.25s;background:var(--teal-light);">
-      <div class="offering-icon" style="background:rgba(29,122,107,0.1);">🤖</div>
+      <div class="offering-icon" style="background:rgba(114,121,131,0.1);">🤖</div>
       <div class="offering-name">AI-Powered Tutoring</div>
       <p class="offering-desc">24/7 intelligent tutoring that answers questions, grades exercises, and surfaces exactly what each learner needs next.</p>
-      <span class="offering-tag" style="background:rgba(29,122,107,0.1);color:var(--teal);">Always-on</span>
+      <span class="offering-tag" style="background:rgba(114,121,131,0.1);color:var(--teal);">Always-on</span>
     </div>
 
     <div class="offering-card reveal" style="transition-delay:0.3s;">
@@ -827,12 +837,12 @@
     el.addEventListener('mouseenter', () => {
       cursor.style.transform = 'scale(2.5)';
       ring.style.transform = 'scale(1.5)';
-      ring.style.borderColor = 'rgba(232,124,46,0.9)';
+      ring.style.borderColor = 'rgba(23,25,29,0.9)';
     });
     el.addEventListener('mouseleave', () => {
       cursor.style.transform = 'scale(1)';
       ring.style.transform = 'scale(1)';
-      ring.style.borderColor = 'rgba(232,124,46,0.5)';
+      ring.style.borderColor = 'rgba(23,25,29,0.5)';
     });
   });
 

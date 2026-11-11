@@ -3,20 +3,24 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Parambhaav — Tech Solutions</title>
+<title>Parambhaav Tech — Digital Services</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500&family=DM+Mono:wght@300;400&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<!-- Brand tokens, logo and favicon: github.com/ParambhavTechSolutions/parambhaav-brand -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ParambhavTechSolutions/parambhaav-brand@v1.0.0/tokens/tokens.css">
+<link rel="icon" type="image/svg+xml" href="https://cdn.jsdelivr.net/gh/ParambhavTechSolutions/parambhaav-brand@v1.0.0/brand/logo/favicon.svg">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <style>
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
   :root {
-    --bg: #050508;
-    --fg: #e8e4f0;
-    --accent: #6c5ce7;
-    --accent2: #00d2ff;
-    --muted: #4a4558;
-    --glow: rgba(108,92,231,0.3);
+    /* Mapped to parambhaav-brand tokens (fallbacks keep the page working offline) */
+    --bg: var(--pb-color-black, #090A0C);
+    --fg: var(--pb-color-text-on-dark, #F5F6F7);
+    --accent: var(--pb-color-silver, #D9DDE2);
+    --accent2: var(--pb-color-silver-shadow, #AEB4BC);
+    --muted: var(--pb-color-muted, #727983);
+    --glow: rgba(217,221,226,0.3);
   }
 
   html { scroll-behavior: smooth; }
@@ -24,14 +28,14 @@
   body {
     background: var(--bg);
     color: var(--fg);
-    font-family: 'Space Grotesk', sans-serif;
+    font-family: var(--pb-font-body, 'Inter', Arial, sans-serif);
     overflow-x: hidden;
     cursor: none;
   }
 
   /* Cursor */
   .cursor { position: fixed; width: 6px; height: 6px; background: var(--accent2); border-radius: 50%; pointer-events: none; z-index: 9999; mix-blend-mode: screen; }
-  .cursor-ring { position: fixed; width: 40px; height: 40px; border: 1px solid rgba(108,92,231,0.6); border-radius: 50%; pointer-events: none; z-index: 9998; transition: transform 0.3s ease, border-color 0.3s; }
+  .cursor-ring { position: fixed; width: 40px; height: 40px; border: 1px solid rgba(217,221,226,0.6); border-radius: 50%; pointer-events: none; z-index: 9998; transition: transform 0.3s ease, border-color 0.3s; }
 
   /* CANVAS */
   #webgl {
@@ -49,12 +53,12 @@
     align-items: center;
     justify-content: space-between;
     padding: 2rem 4rem;
-    background: linear-gradient(to bottom, rgba(5,5,8,0.8), transparent);
+    background: linear-gradient(to bottom, rgba(9,10,12,0.8), transparent);
     backdrop-filter: blur(0px);
   }
 
   .nav-home {
-    font-family: 'DM Mono', monospace;
+    font-family: var(--pb-font-mono, ui-monospace, monospace);
     font-size: 0.65rem;
     letter-spacing: 0.2em;
     color: var(--muted);
@@ -65,7 +69,7 @@
   .nav-home:hover { color: var(--fg); }
 
   .nav-logo {
-    font-family: 'Syne', sans-serif;
+    font-family: var(--pb-font-display, 'Montserrat', sans-serif);
     font-size: 0.9rem;
     font-weight: 700;
     letter-spacing: 0.2em;
@@ -74,7 +78,7 @@
     text-decoration: none;
   }
 
-  .nav-logo span { color: var(--accent); }
+  .nav-logo span { color: var(--fg); }
 
   .nav-links {
     display: flex;
@@ -84,7 +88,7 @@
   .nav-links a {
     color: var(--fg);
     text-decoration: none;
-    font-family: 'DM Mono', monospace;
+    font-family: var(--pb-font-mono, ui-monospace, monospace);
     font-size: 0.7rem;
     letter-spacing: 0.15em;
     text-transform: uppercase;
@@ -105,7 +109,7 @@
   }
 
   .hero-eyebrow {
-    font-family: 'DM Mono', monospace;
+    font-family: var(--pb-font-mono, ui-monospace, monospace);
     font-size: 0.65rem;
     letter-spacing: 0.3em;
     color: var(--accent);
@@ -115,7 +119,7 @@
   }
 
   .hero-title {
-    font-family: 'Syne', sans-serif;
+    font-family: var(--pb-font-display, 'Montserrat', sans-serif);
     font-size: clamp(4rem, 10vw, 9rem);
     font-weight: 800;
     line-height: 0.9;
@@ -133,10 +137,10 @@
 
   .hero-subtitle {
     margin-top: 2.5rem;
-    font-family: 'DM Mono', monospace;
+    font-family: var(--pb-font-mono, ui-monospace, monospace);
     font-size: 0.78rem;
     line-height: 1.9;
-    color: rgba(232,228,240,0.45);
+    color: rgba(245,246,247,0.45);
     max-width: 420px;
     letter-spacing: 0.03em;
     animation: fadeUp 1s ease 0.9s both;
@@ -150,7 +154,7 @@
     flex-direction: column;
     align-items: center;
     gap: 0.75rem;
-    font-family: 'DM Mono', monospace;
+    font-family: var(--pb-font-mono, ui-monospace, monospace);
     font-size: 0.6rem;
     letter-spacing: 0.2em;
     color: var(--muted);
@@ -174,11 +178,11 @@
   .marquee-wrap {
     position: relative;
     z-index: 2;
-    border-top: 1px solid rgba(108,92,231,0.2);
-    border-bottom: 1px solid rgba(108,92,231,0.2);
+    border-top: 1px solid rgba(217,221,226,0.2);
+    border-bottom: 1px solid rgba(217,221,226,0.2);
     overflow: hidden;
     padding: 1.2rem 0;
-    background: rgba(5,5,8,0.8);
+    background: rgba(9,10,12,0.8);
   }
 
   .marquee {
@@ -189,7 +193,7 @@
   }
 
   .marquee span {
-    font-family: 'DM Mono', monospace;
+    font-family: var(--pb-font-mono, ui-monospace, monospace);
     font-size: 0.65rem;
     letter-spacing: 0.3em;
     text-transform: uppercase;
@@ -220,15 +224,15 @@
   }
 
   .section-num {
-    font-family: 'Syne', sans-serif;
+    font-family: var(--pb-font-display, 'Montserrat', sans-serif);
     font-size: 6rem;
     font-weight: 800;
-    color: rgba(108,92,231,0.08);
+    color: rgba(217,221,226,0.08);
     line-height: 1;
   }
 
   .section-title {
-    font-family: 'Syne', sans-serif;
+    font-family: var(--pb-font-display, 'Montserrat', sans-serif);
     font-size: clamp(2rem, 5vw, 4rem);
     font-weight: 700;
     line-height: 1.1;
@@ -240,12 +244,12 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 1px;
-    border: 1px solid rgba(108,92,231,0.1);
+    border: 1px solid rgba(217,221,226,0.1);
   }
 
   .service-item {
     padding: 3rem 2.5rem;
-    border: 1px solid rgba(108,92,231,0.1);
+    border: 1px solid rgba(217,221,226,0.1);
     position: relative;
     overflow: hidden;
     transition: background 0.4s;
@@ -262,7 +266,7 @@
   }
 
   .service-item:hover::before { transform: scaleX(1); }
-  .service-item:hover { background: rgba(108,92,231,0.06); }
+  .service-item:hover { background: rgba(217,221,226,0.06); }
 
   .service-icon {
     font-size: 2rem;
@@ -271,7 +275,7 @@
   }
 
   .service-name {
-    font-family: 'Syne', sans-serif;
+    font-family: var(--pb-font-display, 'Montserrat', sans-serif);
     font-size: 1.2rem;
     font-weight: 700;
     margin-bottom: 1rem;
@@ -279,17 +283,17 @@
   }
 
   .service-desc {
-    font-family: 'DM Mono', monospace;
+    font-family: var(--pb-font-mono, ui-monospace, monospace);
     font-size: 0.7rem;
     line-height: 1.9;
-    color: rgba(232,228,240,0.4);
+    color: rgba(245,246,247,0.4);
     letter-spacing: 0.02em;
   }
 
   .service-tag {
     position: absolute;
     top: 2rem; right: 2rem;
-    font-family: 'DM Mono', monospace;
+    font-family: var(--pb-font-mono, ui-monospace, monospace);
     font-size: 0.6rem;
     color: var(--accent);
     letter-spacing: 0.15em;
@@ -304,8 +308,8 @@
     position: relative;
     z-index: 2;
     padding: 8rem 4rem;
-    background: linear-gradient(135deg, rgba(108,92,231,0.08), rgba(0,210,255,0.04));
-    border-top: 1px solid rgba(108,92,231,0.15);
+    background: linear-gradient(135deg, rgba(217,221,226,0.08), rgba(174,180,188,0.04));
+    border-top: 1px solid rgba(217,221,226,0.15);
   }
 
   .feature-inner {
@@ -316,7 +320,7 @@
   }
 
   .feature-headline {
-    font-family: 'Syne', sans-serif;
+    font-family: var(--pb-font-display, 'Montserrat', sans-serif);
     font-size: clamp(2.5rem, 5vw, 4rem);
     font-weight: 800;
     line-height: 1.05;
@@ -343,7 +347,7 @@
   }
 
   .point-num {
-    font-family: 'DM Mono', monospace;
+    font-family: var(--pb-font-mono, ui-monospace, monospace);
     font-size: 0.6rem;
     color: var(--accent);
     letter-spacing: 0.15em;
@@ -360,9 +364,9 @@
   }
 
   .point-text p {
-    font-family: 'DM Mono', monospace;
+    font-family: var(--pb-font-mono, ui-monospace, monospace);
     font-size: 0.7rem;
-    color: rgba(232,228,240,0.4);
+    color: rgba(245,246,247,0.4);
     line-height: 1.7;
     letter-spacing: 0.02em;
   }
@@ -377,7 +381,7 @@
   }
 
   .cta-title {
-    font-family: 'Syne', sans-serif;
+    font-family: var(--pb-font-display, 'Montserrat', sans-serif);
     font-size: clamp(3rem, 7vw, 6rem);
     font-weight: 800;
     line-height: 1;
@@ -385,9 +389,9 @@
   }
 
   .cta-sub {
-    font-family: 'DM Mono', monospace;
+    font-family: var(--pb-font-mono, ui-monospace, monospace);
     font-size: 0.8rem;
-    color: rgba(232,228,240,0.4);
+    color: rgba(245,246,247,0.4);
     margin-bottom: 3rem;
     letter-spacing: 0.05em;
   }
@@ -400,7 +404,7 @@
     background: linear-gradient(90deg, var(--accent), var(--accent2));
     color: #fff;
     text-decoration: none;
-    font-family: 'DM Mono', monospace;
+    font-family: var(--pb-font-mono, ui-monospace, monospace);
     font-size: 0.75rem;
     letter-spacing: 0.2em;
     text-transform: uppercase;
@@ -413,7 +417,7 @@
   footer {
     position: relative;
     z-index: 2;
-    border-top: 1px solid rgba(108,92,231,0.15);
+    border-top: 1px solid rgba(217,221,226,0.15);
     padding: 2.5rem 4rem;
     display: flex;
     align-items: center;
@@ -422,7 +426,7 @@
   }
 
   .footer-brand {
-    font-family: 'DM Mono', monospace;
+    font-family: var(--pb-font-mono, ui-monospace, monospace);
     font-size: 0.65rem;
     letter-spacing: 0.2em;
     color: var(--muted);
@@ -434,7 +438,7 @@
   }
 
   .footer-parent {
-    font-family: 'DM Mono', monospace;
+    font-family: var(--pb-font-mono, ui-monospace, monospace);
     font-size: 0.65rem;
     letter-spacing: 0.15em;
     color: var(--muted);
@@ -466,6 +470,10 @@
     .feature-inner { grid-template-columns: 1fr; gap: 3rem; }
     footer { padding: 2rem; flex-direction: column; gap: 1rem; text-align: center; }
   }
+
+  /* Brand: logo symbol in nav (parambhaav-brand) */
+  .nav-logo { display: inline-flex; align-items: center; gap: 0.6em; font-family: var(--pb-font-display, 'Montserrat', sans-serif); }
+  .nav-logo-mark { height: 1.9em; width: auto; display: block; }
 </style>
 </head>
 <body>
@@ -479,7 +487,7 @@
 <!-- NAV -->
 <nav>
   <a class="nav-home" href="parambhaav-home.html">← Parambhaav</a>
-  <a class="nav-logo" href="#">Param<span>Tech</span></a>
+  <a class="nav-logo" href="#"><img class="nav-logo-mark" src="https://cdn.jsdelivr.net/gh/ParambhavTechSolutions/parambhaav-brand@v1.0.0/brand/logo/symbol.svg" alt="" aria-hidden="true"><span>Parambhaav</span> Tech</a>
   <ul class="nav-links">
     <li><a href="#services">Services</a></li>
     <li><a href="#approach">Approach</a></li>
@@ -696,7 +704,7 @@
   // Floating torus wireframe
   const torusGeo = new THREE.TorusGeometry(1.8, 0.5, 6, 24);
   const torusMat = new THREE.MeshBasicMaterial({
-    color: 0x6c5ce7,
+    color: 0xD9DDE2,
     wireframe: true,
     transparent: true,
     opacity: 0.06,
@@ -708,7 +716,7 @@
   // Icosahedron
   const icoGeo = new THREE.IcosahedronGeometry(0.8, 1);
   const icoMat = new THREE.MeshBasicMaterial({
-    color: 0x00d2ff,
+    color: 0xAEB4BC,
     wireframe: true,
     transparent: true,
     opacity: 0.08,
@@ -779,12 +787,12 @@
     el.addEventListener('mouseenter', () => {
       cursor.style.transform = 'scale(3)';
       ring.style.transform = 'scale(1.8)';
-      ring.style.borderColor = 'rgba(0,210,255,0.8)';
+      ring.style.borderColor = 'rgba(174,180,188,0.8)';
     });
     el.addEventListener('mouseleave', () => {
       cursor.style.transform = 'scale(1)';
       ring.style.transform = 'scale(1)';
-      ring.style.borderColor = 'rgba(108,92,231,0.6)';
+      ring.style.borderColor = 'rgba(217,221,226,0.6)';
     });
   });
 
