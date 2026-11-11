@@ -3,19 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Parambhaav Pvt Ltd</title>
+<title>Parambhaav Tech</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<!-- Brand tokens, logo and favicon: github.com/ParambhavTechSolutions/parambhaav-brand -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/ParambhavTechSolutions/parambhaav-brand@v1.0.0/tokens/tokens.css">
+<link rel="icon" type="image/svg+xml" href="https://cdn.jsdelivr.net/gh/ParambhavTechSolutions/parambhaav-brand@v1.0.0/brand/logo/favicon.svg">
 <style>
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
   :root {
-    --ink: #0a0a0a;
-    --cream: #f5f0e8;
-    --gold: #c9a84c;
-    --gold-light: #e8d5a3;
-    --muted: #6b6560;
-    --divider: rgba(201,168,76,0.25);
+    /* Mapped to parambhaav-brand tokens (fallbacks keep the page working offline) */
+    --ink: var(--pb-color-black, #090A0C);
+    --cream: var(--pb-color-text-on-dark, #F5F6F7);
+    --gold: var(--pb-color-silver, #D9DDE2);
+    --gold-light: var(--pb-color-silver-highlight, #F7F8FA);
+    --muted: var(--pb-color-muted, #727983);
+    --divider: rgba(217,221,226,0.25);
   }
 
   html { scroll-behavior: smooth; }
@@ -23,7 +27,7 @@
   body {
     background: var(--ink);
     color: var(--cream);
-    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-family: var(--pb-font-body, 'Inter', Arial, sans-serif);
     overflow-x: hidden;
     cursor: none;
   }
@@ -42,7 +46,7 @@
   .cursor-ring {
     position: fixed;
     width: 36px; height: 36px;
-    border: 1px solid rgba(201,168,76,0.5);
+    border: 1px solid rgba(217,221,226,0.5);
     border-radius: 50%;
     pointer-events: none;
     z-index: 9998;
@@ -67,7 +71,7 @@
     letter-spacing: 0.3em;
     text-transform: uppercase;
     color: var(--gold);
-    font-family: 'DM Mono', monospace;
+    font-family: var(--pb-font-mono, ui-monospace, monospace);
     text-decoration: none;
   }
 
@@ -83,7 +87,7 @@
     font-size: 0.75rem;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    font-family: 'DM Mono', monospace;
+    font-family: var(--pb-font-mono, ui-monospace, monospace);
     opacity: 0.6;
     transition: opacity 0.3s;
   }
@@ -104,8 +108,8 @@
     position: absolute;
     inset: 0;
     background-image:
-      linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px);
+      linear-gradient(rgba(217,221,226,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(217,221,226,0.04) 1px, transparent 1px);
     background-size: 80px 80px;
     pointer-events: none;
   }
@@ -119,7 +123,7 @@
   }
 
   .hero-index {
-    font-family: 'DM Mono', monospace;
+    font-family: var(--pb-font-mono, ui-monospace, monospace);
     font-size: 0.65rem;
     letter-spacing: 0.25em;
     color: var(--gold);
@@ -149,9 +153,9 @@
     font-weight: 300;
     line-height: 1.8;
     max-width: 480px;
-    color: rgba(245,240,232,0.6);
+    color: rgba(245,246,247,0.6);
     animation: fadeUp 1.2s ease 0.25s both;
-    font-family: 'DM Mono', monospace;
+    font-family: var(--pb-font-mono, ui-monospace, monospace);
     font-size: 0.8rem;
     letter-spacing: 0.05em;
   }
@@ -163,7 +167,7 @@
     display: flex;
     align-items: center;
     gap: 1rem;
-    font-family: 'DM Mono', monospace;
+    font-family: var(--pb-font-mono, ui-monospace, monospace);
     font-size: 0.65rem;
     letter-spacing: 0.25em;
     color: var(--muted);
@@ -184,7 +188,7 @@
   }
 
   .section-label {
-    font-family: 'DM Mono', monospace;
+    font-family: var(--pb-font-mono, ui-monospace, monospace);
     font-size: 0.65rem;
     letter-spacing: 0.3em;
     color: var(--gold);
@@ -225,16 +229,16 @@
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg, rgba(201,168,76,0.06), transparent);
+    background: linear-gradient(135deg, rgba(217,221,226,0.06), transparent);
     opacity: 0;
     transition: opacity 0.4s;
   }
 
   .vertical-card:hover::before { opacity: 1; }
-  .vertical-card:hover { border-color: rgba(201,168,76,0.5); }
+  .vertical-card:hover { border-color: rgba(217,221,226,0.5); }
 
   .card-number {
-    font-family: 'DM Mono', monospace;
+    font-family: var(--pb-font-mono, ui-monospace, monospace);
     font-size: 0.65rem;
     color: var(--gold);
     letter-spacing: 0.2em;
@@ -252,10 +256,10 @@
   .card-title em { font-style: italic; color: var(--gold); }
 
   .card-desc {
-    font-family: 'DM Mono', monospace;
+    font-family: var(--pb-font-mono, ui-monospace, monospace);
     font-size: 0.72rem;
     line-height: 1.9;
-    color: rgba(245,240,232,0.5);
+    color: rgba(245,246,247,0.5);
     max-width: 380px;
     margin-bottom: 3rem;
     letter-spacing: 0.03em;
@@ -265,7 +269,7 @@
     display: inline-flex;
     align-items: center;
     gap: 1rem;
-    font-family: 'DM Mono', monospace;
+    font-family: var(--pb-font-mono, ui-monospace, monospace);
     font-size: 0.7rem;
     letter-spacing: 0.2em;
     text-transform: uppercase;
@@ -297,7 +301,7 @@
   .card-tag {
     position: absolute;
     top: 3rem; right: 4rem;
-    font-family: 'DM Mono', monospace;
+    font-family: var(--pb-font-mono, ui-monospace, monospace);
     font-size: 0.6rem;
     letter-spacing: 0.2em;
     color: var(--muted);
@@ -330,10 +334,10 @@
   }
 
   .philosophy-para {
-    font-family: 'DM Mono', monospace;
+    font-family: var(--pb-font-mono, ui-monospace, monospace);
     font-size: 0.75rem;
     line-height: 2;
-    color: rgba(245,240,232,0.55);
+    color: rgba(245,246,247,0.55);
     letter-spacing: 0.03em;
     margin-bottom: 2rem;
     max-width: 600px;
@@ -357,7 +361,7 @@
   }
 
   .stat-label {
-    font-family: 'DM Mono', monospace;
+    font-family: var(--pb-font-mono, ui-monospace, monospace);
     font-size: 0.65rem;
     letter-spacing: 0.2em;
     color: var(--muted);
@@ -374,7 +378,7 @@
   }
 
   .footer-logo {
-    font-family: 'DM Mono', monospace;
+    font-family: var(--pb-font-mono, ui-monospace, monospace);
     font-size: 0.75rem;
     letter-spacing: 0.3em;
     color: var(--gold);
@@ -388,7 +392,7 @@
   }
 
   .footer-links a {
-    font-family: 'DM Mono', monospace;
+    font-family: var(--pb-font-mono, ui-monospace, monospace);
     font-size: 0.65rem;
     letter-spacing: 0.15em;
     color: var(--muted);
@@ -399,7 +403,7 @@
   .footer-links a:hover { color: var(--cream); }
 
   .footer-copy {
-    font-family: 'DM Mono', monospace;
+    font-family: var(--pb-font-mono, ui-monospace, monospace);
     font-size: 0.6rem;
     letter-spacing: 0.15em;
     color: var(--muted);
@@ -442,6 +446,12 @@
     .philosophy-grid { grid-template-columns: 1fr; gap: 2rem; }
     .stats-row { grid-template-columns: 1fr 1fr; }
   }
+
+  /* Brand: headings use the display font (body is Inter) */
+  h1, h2, h3, h4 { font-family: var(--pb-font-display, 'Montserrat', sans-serif); }
+  /* Brand: logo symbol in nav (parambhaav-brand) */
+  .nav-logo { display: inline-flex; align-items: center; gap: 0.6em; font-family: var(--pb-font-display, 'Montserrat', sans-serif); }
+  .nav-logo-mark { height: 1.9em; width: auto; display: block; }
 </style>
 </head>
 <body>
@@ -451,7 +461,7 @@
 
 <!-- NAV -->
 <nav>
-  <a class="nav-logo" href="#">Parambhaav</a>
+  <a class="nav-logo" href="#"><img class="nav-logo-mark" src="https://cdn.jsdelivr.net/gh/ParambhavTechSolutions/parambhaav-brand@v1.0.0/brand/logo/symbol.svg" alt="" aria-hidden="true">Parambhaav Tech</a>
   <ul class="nav-links">
     <li><a href="#verticals">Verticals</a></li>
     <li><a href="#philosophy">Philosophy</a></li>
@@ -600,12 +610,12 @@
     el.addEventListener('mouseenter', () => {
       cursor.style.transform = 'scale(2.5)';
       ring.style.transform = 'scale(1.5)';
-      ring.style.borderColor = 'rgba(201,168,76,0.8)';
+      ring.style.borderColor = 'rgba(217,221,226,0.8)';
     });
     el.addEventListener('mouseleave', () => {
       cursor.style.transform = 'scale(1)';
       ring.style.transform = 'scale(1)';
-      ring.style.borderColor = 'rgba(201,168,76,0.5)';
+      ring.style.borderColor = 'rgba(217,221,226,0.5)';
     });
   });
 
